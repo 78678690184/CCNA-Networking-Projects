@@ -1,0 +1,42 @@
+! Router1 Configuration
+! Project: DHCP and Static Routing
+! LAN 1: 192.168.1.0/24
+! Router-to-router network: 192.168.3.0/24
+
+enable
+configure terminal
+hostname Router1
+
+interface FastEthernet0/0
+ description LAN-1-to-Switch1
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown
+exit
+
+interface FastEthernet0/1
+ description Link-to-Router2
+ ip address 192.168.3.1 255.255.255.0
+ no shutdown
+exit
+
+! Exclude gateway and other reserved addresses from DHCP
+ip dhcp excluded-address 192.168.1.1 192.168.1.10
+
+ip dhcp pool cisco1
+ network 192.168.1.0 255.255.255.0
+ default-router 192.168.1.1
+exit
+
+! Route to Router2 LAN
+ip route 192.168.2.0 255.255.255.0 192.168.3.2
+
+end
+write memory
+
+! Verification commands:
+! show ip interface brief
+! show ip route
+! show ip dhcp pool
+! show ip dhcp binding
+! ping 192.168.3.2
+! ping 192.168.2.1

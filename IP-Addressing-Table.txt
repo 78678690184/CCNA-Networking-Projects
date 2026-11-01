@@ -1,0 +1,106 @@
+PROJECT: DHCP AND STATIC ROUTING IMPLEMENTATION
+TOOL: Cisco Packet Tracer
+
+============================================================
+1. NETWORK SUMMARY
+============================================================
+
+Network 1 (LAN 1)
+Network address : 192.168.1.0/24
+Subnet mask     : 255.255.255.0
+Default gateway : 192.168.1.1
+DHCP pool name  : cisco1
+Router          : Router1
+Connected devices: Switch1, Laptop1, Laptop2
+
+Network 2 (LAN 2)
+Network address : 192.168.2.0/24
+Subnet mask     : 255.255.255.0
+Default gateway : 192.168.2.1
+DHCP pool name  : cisco2
+Router          : Router2
+Connected devices: Switch2, Laptop3, Laptop4
+
+Network 3 (Router transit network)
+Network address : 192.168.3.0/24
+Subnet mask     : 255.255.255.0
+Purpose         : Connection between Router1 and Router2
+
+============================================================
+2. ROUTER INTERFACE ADDRESSING
+============================================================
+
+Device   Interface   IP address       Subnet mask
+------------------------------------------------------------
+Router1  Fa0/0       192.168.1.1      255.255.255.0
+Router1  Fa0/1       192.168.3.1      255.255.255.0
+Router2  Fa0/0       192.168.2.1      255.255.255.0
+Router2  Fa0/1       192.168.3.2      255.255.255.0
+
+============================================================
+3. LAPTOP ADDRESSING (ASSIGNED BY DHCP)
+============================================================
+
+Device    Network       Address assignment   Default gateway
+------------------------------------------------------------
+Laptop1   192.168.1.0   DHCP                  192.168.1.1
+Laptop2   192.168.1.0   DHCP                  192.168.1.1
+Laptop3   192.168.2.0   DHCP                  192.168.2.1
+Laptop4   192.168.2.0   DHCP                  192.168.2.1
+
+IMPORTANT:
+The exact IP addresses leased to the laptops are not included here
+because their actual DHCP lease values have not yet been provided.
+After selecting Desktop > IP Configuration > DHCP on each laptop,
+record the assigned IPv4 address and update this table.
+
+============================================================
+4. STATIC ROUTES
+============================================================
+
+Router1:
+Destination network : 192.168.2.0
+Subnet mask         : 255.255.255.0
+Next-hop address    : 192.168.3.2
+Command:
+ip route 192.168.2.0 255.255.255.0 192.168.3.2
+
+Router2:
+Destination network : 192.168.1.0
+Subnet mask         : 255.255.255.0
+Next-hop address    : 192.168.3.1
+Command:
+ip route 192.168.1.0 255.255.255.0 192.168.3.1
+
+============================================================
+5. DHCP POOLS
+============================================================
+
+Router1:
+Pool name       : cisco1
+Network         : 192.168.1.0 255.255.255.0
+Default router  : 192.168.1.1
+
+Router2:
+Pool name       : cisco2
+Network         : 192.168.2.0 255.255.255.0
+Default router  : 192.168.2.1
+
+Cisco IOS syntax note:
+Use "default-router" inside DHCP pool configuration.
+The correct command is:
+default-router 192.168.1.1
+(or default-router 192.168.2.1 on Router2)
+
+============================================================
+6. ROUTING METHOD AND PROTOCOLS
+============================================================
+
+Routing method: Static routing (manually configured routes)
+DHCP: Dynamic Host Configuration Protocol
+IP version: IPv4
+Subnetting: /24 (255.255.255.0)
+
+Note: Network 3 is directly connected to both routers. It does not
+need an additional static route on either router because it is a
+directly connected network.
