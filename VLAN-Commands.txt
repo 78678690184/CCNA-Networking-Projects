@@ -1,0 +1,100 @@
+VLAN CONFIGURATION – CISCO 2960 (S1)
+========================================
+
+1) Enter configuration mode
+--------------------------
+enable
+configure terminal
+hostname S1
+
+2) Create VLANs
+---------------
+vlan 10
+ name A
+ exit
+
+vlan 20
+ name B
+ exit
+
+vlan 30
+ name 30
+ exit
+
+3) Configure individual access ports
+-----------------------------------
+
+Fa0/1 -> VLAN 10
+interface fa0/1
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+ exit
+
+Fa0/2 -> VLAN 20
+interface fa0/2
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+ exit
+
+Fa0/3 -> VLAN 30
+interface fa0/3
+ switchport mode access
+ switchport access vlan 30
+ no shutdown
+ exit
+
+Fa0/4 -> VLAN 10
+interface fa0/4
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+ exit
+
+Fa0/5 -> VLAN 20
+interface fa0/5
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+ exit
+
+Fa0/6 -> VLAN 30
+interface fa0/6
+ switchport mode access
+ switchport access vlan 30
+ no shutdown
+ exit
+
+4) Verify VLANs and port assignments
+-----------------------------------
+end
+show vlan brief
+show interfaces fa0/1 switchport
+show running-config
+
+5) Save configuration
+--------------------
+copy running-config startup-config
+
+OR
+write memory
+
+IMPORTANT – PING / INTER-VLAN ROUTING
+=====================================
+Same VLAN PCs can ping each other if IP address and subnet mask are correct.
+
+Different VLAN PCs cannot ping each other in this Layer 2-only lab.
+
+Reason:
+- Each VLAN is a separate Layer 2 broadcast domain.
+- Different VLANs use different IP subnets in this topology.
+- Inter-VLAN Routing is required for communication between VLANs.
+- Inter-VLAN Routing can be configured using a router (Router-on-a-Stick)
+  or a Layer 3 switch.
+- This lab has no router or Layer 3 routing configuration.
+
+Port/VLAN summary:
+Fa0/1, Fa0/4 -> VLAN 10
+Fa0/2, Fa0/5 -> VLAN 20
+Fa0/3, Fa0/6 -> VLAN 30
